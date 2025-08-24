@@ -1,0 +1,14 @@
+### Post New Blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "My First Blog Post",
+    "author": "Jane Doe",
+    "url": "http://example.com/my-first-blog-post",
+    "likes": 5
+}
+
+### See All Blogs
+GET http://localhost:3001/api/blogs
+

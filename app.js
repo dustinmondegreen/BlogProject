@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
-require('dotenv').config();
+const blogsRouter = require('./controllers/blogs')
+require('dotenv').config()
 
 const app = express()
 
@@ -14,5 +15,9 @@ const mongooseConnect = async () => {
 }
 
 mongooseConnect()
+
+app.use(express.json())
+
+app.use('/api/blogs', blogsRouter)
 
 module.exports = app
