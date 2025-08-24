@@ -9,6 +9,25 @@ Content-Type: application/json
     "likes": 5
 }
 
+### Delete Everything in Collection 
+DELETE http://localhost:3001/api/blogs
+
 ### See All Blogs
 GET http://localhost:3001/api/blogs
 
+### See a particular Blog
+GET http://localhost:3001/api/blogs/68aadf3b2d16dec77a4e4fac
+
+### Delete a Blog
+DELETE http://localhost:3001/api/blogs/68aadf3b2d16dec77a4e4fac
+
+### Modify an existing blog
+PUT http://localhost:3001/api/blogs/68aae994710197247c2fb893
+Content-Type: application/json
+
+{
+    "title": "My HOWEW Blog Post",
+    "author": "MOMO Doe",
+    "url": "http://example.com/my-first-blog-wef",
+    "likes": 10
+}

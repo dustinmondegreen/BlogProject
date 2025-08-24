@@ -10,14 +10,48 @@ blogsRouter.get('/', async (request, response) => {
     }
 })
 
+blogsRouter.get('/:id', async (request, response) => {
+    const blogs = await Blog.findById(request.params.id)
+    if(blogs){
+        response.json(blogs)
+    } else {
+        response.status(404).json({error: 'Blog not found'})
+    }
+})
+
 blogsRouter.post('/', async (request, response) => {
     const blog = new Blog(request.body)
     const result = await blog.save()
     if(!blog){
-        return response.status(400).error('Blog Couldn\'t be saved')
+        return response.status(500).error('Blog Couldn\'t be saved')
     }
     return response.status(201).json(result)
 })
+
+blogsRouter.put('/:id', async (request, response) => {
+    const {title, author, url, likes } = request.body
+    const blog = await Blog.findById(request.params.id)
+
+    blog.title = title
+    blog.author = author
+    blog.url = url
+    blog.likes = likes
+
+    const result = await blog.save()
+    return response.status(200).json(result)
+    
+})
+
+blogsRouter.delete('/:id', async (request, response) => {
+    const blog = await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).json(blog)
+})
+
+blogsRouter.delete('/', async (request, response) => {
+    const blog = await Blog.deleteMany({})
+    response.status(204).json(blog)
+})
+
 
 
 
