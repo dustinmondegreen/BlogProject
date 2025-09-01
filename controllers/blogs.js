@@ -20,12 +20,15 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
+    try{
     const blog = new Blog(request.body)
     const result = await blog.save()
-    if(!blog){
-        return response.status(500).error('Blog Couldn\'t be saved')
-    }
     return response.status(201).json(result)
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            return response.status(400).json({ error: error.message })
+        }  
+    }
 })
 
 blogsRouter.put('/:id', async (request, response) => {

@@ -3,11 +3,13 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "title": "My First Blog Post",
-    "author": "Jane Doe",
-    "url": "http://example.com/my-first-blog-post",
-    "likes": 5
+      "title": "Aurora Borealis", 
+      "author": "yoyomayo",
+      "url": "hello!",
+      "likes": 5
 }
+
+
 
 ### Delete Everything in Collection 
 DELETE http://localhost:3001/api/blogs
