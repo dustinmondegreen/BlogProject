@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "A Backend for BlogProject",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustinmondegreen/BlogProject.git"
+  },
+  "keywords": [
+    "Express",
+    "REST",
+    "API"
+  ],
+  "author": "Antonius William",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dustinmondegreen/BlogProject/issues"
+  },
+  "homepage": "https://github.com/dustinmondegreen/BlogProject#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2"
+  }
+}
