@@ -1,5 +1,6 @@
-const app = require('./app')
+import app from './app.js'
+import { PORT } from './config/config.js'
 
-app.listen(config.PORT, () => {
-    print(`Server is runing on port ${process.env.PORT}`)
+app.listen(process.env.PORT, () => {
+    console.log(`Server is runing on port ${PORT}`)
 })
