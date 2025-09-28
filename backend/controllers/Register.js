@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt'
 import express from 'express'
 const registerRouter = express.Router()
-import User from '../models/user'
+import User from '../models/user.js'
+
+// registerRouter.get('/', async )
 
 registerRouter.post('/', async (request, response) => {
     try{
@@ -15,11 +17,11 @@ registerRouter.post('/', async (request, response) => {
             passwordHash
         })
 
+        return response.status(201).json(user)
+
     } catch (error) {
-        console.log(error)
+        response.status(404).json(error)
     }
-
-
 })
 
 export default registerRouter
