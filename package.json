@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "A backend for BlogProject using Express and SQLite",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
-    "test": "dev"
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js" 
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,8 @@
   "dependencies": {
     "better-sqlite3": "^12.4.1",
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

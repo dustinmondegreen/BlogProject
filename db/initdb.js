@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
 
-const db = new Database('app.db');
+const db = new Database('./db/app.db');
 
 const query = `
     CREATE TABLE IF NOT EXISTS users (
@@ -10,7 +10,7 @@ const query = `
         password TEXT NOT NULL,
         creationDate TEXT,
         UNIQUE(email, username),
-        CHECK(length(username) BETWEEN 3 AND 32, length(email) <= 254)
+        CHECK((length(username) BETWEEN 3 AND 32) AND (length(email) <= 254))
     );
 
     CREATE TABLE IF NOT EXISTS blogs (
@@ -25,6 +25,12 @@ const query = `
     );
 `;
 
-export default function (){
-    db.exec(query)
+export default function initdb(){
+    try{
+        db.exec(query)
+        console.log('DB successfully initalized')
+    } catch (error) {
+        
+        console.log(error)
+    }
 };
