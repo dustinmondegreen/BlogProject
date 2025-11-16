@@ -1,0 +1,24 @@
+{
+  "name": "blogproject",
+  "version": "1.0.0",
+  "description": "A backend for BlogProject using Express and SQLite",
+  "main": "index.js",
+  "scripts": {
+    "test": "dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustinmondegreen/BlogProject.git"
+  },
+  "keywords": [
+    "Blog",
+    "Express",
+    "SQLite"
+  ],
+  "author": "dustinmondegreen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dustinmondegreen/BlogProject/issues"
+  },
+  "homepage": "https://github.com/dustinmondegreen/BlogProject#readme"
+}
