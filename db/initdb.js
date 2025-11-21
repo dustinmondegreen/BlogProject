@@ -11,3 +11,5 @@ export default function initdb(){
         console.log(error)
     }
 };
+
+export {db};

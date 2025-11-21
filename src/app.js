@@ -1,19 +1,23 @@
 import express from 'express';
 import initdb from '../db/initdb.js';
-import testValidData from '../schemas/userschema.js';
-
-// import passport from 'passport';
-// import { query } from 'express-validator'
+import { db } from '../db/initdb.js';
+import { validateUser } from '../middleware/validation.js';
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 
 initdb();
 
-testValidData();
+app.post('/api/v1/users', validateUser, (req, res) => {
+    try{
+        const {email, username, password} = req.body;
+        const insert = db.prepare(`INSERT INTO users(email, username, password_hash) VALUES (?, ?, ?)`);
+        const info = insert.run(email, username, password)
+        return res.status(201).send({message: `${info.lastInsertRowid}`});
+    } catch (error) {
+        return res.status(400).send({message: `${error}`})
+    }
 
-app.post('/user', (req, res) => {
-    res.status(201).send({message: 'User Created'})
 })
 
 export default app
