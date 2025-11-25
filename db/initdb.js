@@ -7,7 +7,6 @@ export default function initdb(){
         db.exec(query)
         console.log('DB successfully initalized')
     } catch (error) {
-        
         console.log(error)
     }
 };
