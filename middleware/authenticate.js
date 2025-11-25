@@ -1,11 +1,12 @@
 import { db } from "../db/initdb.js";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 export const authenticateUser = async (req, res, next) => {
     const {email, username, password} = req.body; 
     const query = db.prepare(`
-        SELECT email, username, password_hash FROM users WHERE email = ? OR username = ?
+        SELECT userID, email, username, password_hash FROM users WHERE email = ? OR username = ?
     `);
 
     try{
@@ -27,6 +28,21 @@ export const authenticateUser = async (req, res, next) => {
         console.log(error);
         return res.status(404).send(error)
     }
+}
 
+export const authenticateCookie = async (req, res, next) => {
+    const token = req.cookies.token;
+    if(!token){
+        return res.status(401).send({error: 'stop hacking'});
+    }
 
+    const user = jwt.verify(token, process.env.SECRET_KEY);
+
+    if(!user) {
+        return res.status(401).send({error: 'stop hacking'});
+    }
+
+    req.user = user; 
+
+    next();
 }
