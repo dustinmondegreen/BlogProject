@@ -14,37 +14,88 @@ app.use(express.json());
 
 initdb();
 
-app.post('/api/v1/users', validateUser, async (req, res) => {
-    try{
-        const {email, username, password} = req.body;
+// app.post('/api/v1/users', validateUser, async (req, res) => {
+//     try{
+//         const {email, username, password} = req.body;
 
-        const passwordHash = await bcrypt.hash(password, 10)
+//         const passwordHash = await bcrypt.hash(password, 10)
 
-        const insert = db.prepare(`INSERT INTO users(email, username, password_hash) VALUES (?, ?, ?)`);
+//         const insert = db.prepare(`INSERT INTO users(email, username, password_hash) VALUES (?, ?, ?)`);
 
-        const info = insert.run(email, username, passwordHash)
+//         const info = insert.run(email, username, passwordHash)
 
-        return res.status(201).send({message: `${info.lastInsertRowid}`});
-    } catch (error) {
-        console.log(error);
-        return res.status(400).send({message: `${error}`})
-    }
-})
+//         return res.status(201).send({message: `${info.lastInsertRowid}`});
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(400).send({message: `${error}`})
+//     }
+// })
 
-app.use('/api', authenticateCookie);
+// app.use('/api', authenticateCookie);
 
-app.post('/api/v1/auth/login', authenticateUser, async (req, res) => {
-    const token = jwt.sign(req.body.username, process.env.SECRET_KEY);
-    res.cookie('token', token, {
-        httpOnly: true, 
-        secure: true,
-        sameSite: 'Lax',
-        path: '/'
-    });
+// app.post('/api/v1/auth/login', authenticateUser, async (req, res) => {
+//     const token = jwt.sign(req.body.username, process.env.SECRET_KEY);
+//     res.cookie('token', token, {
+//         httpOnly: true, 
+//         secure: true,
+//         sameSite: 'Lax',
+//         path: '/'
+//     });
 
-    res.status(201).send({message: `Succesfully logged in`})
+//     res.status(201).send({message: `Succesfully logged in`})
     
+// })
+
+app.get('/api/v1/posts', (req, res) => {
+    try{
+        const blogs = db.prepare(`
+            SELECT B.title, B.body, B.publishDate
+            FROM blogs B
+            ORDER BY blogID DESC
+            LIMIT 10;
+        `).all();
+
+        console.log('10 blogs retrieved');
+
+        console.log(blogs);
+
+        return res.status(200).json(blogs);
+
+    } catch (error) {
+        return res.status(404).send({message: 'no blogs found'});
+    };
+});
+
+app.get('/api/v1/posts/:id', (req, res) => {
+    try {
+        console.log(req.params.id);
+
+        const blog = db.prepare(`
+            SELECT B.title, B.body, B.publishDate
+            FROM blogs B WHERE blogID = ?;
+        `).get(req.params.id);
+
+        return res.status(200).json(blog);
+    } catch (error) {
+        return res.status(404).send({message: 'no blogs found'});
+    }
+
+});
+
+app.post('/api/v1/posts', (req, res) => {
+    return res.status(201).send({message: 'blog created'});
+}); 
+
+app.put('/api/v1/posts/:id', (req, res) => {
+    return res.status(200).send({message: 'blog updated'});
+});
+
+app.delete('/api/v1/posts/:id', (req, res) => {
+    return res.status(204).send({message: 'blog deleted'});
 })
+
+
+
 
 
 export default app
