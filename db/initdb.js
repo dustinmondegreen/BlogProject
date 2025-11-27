@@ -4,6 +4,7 @@ const db = new Database('./db/app.db');
 
 export default function initdb(){
     try{
+        db.exec(`PRAGMA foreign_keys = ON;`)
         db.exec(query)
         console.log('DB successfully initalized')
     } catch (error) {

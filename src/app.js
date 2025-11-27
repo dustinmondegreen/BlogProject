@@ -83,16 +83,49 @@ app.get('/api/v1/posts/:id', (req, res) => {
 });
 
 app.post('/api/v1/posts', (req, res) => {
-    return res.status(201).send({message: 'blog created'});
+    const {title, body, userID} = req.body; 
+
+    try{
+        const blog = db.prepare(`
+            INSERT INTO blogs(title, body, userID) VALUES
+	            (?, ?, ?);    
+        `).run(title, body, userID);
+
+        return res.status(201).send({message: `Blog Created: ${blog.changes}`});
+    } catch (error) {
+        return res.status(400).send({error});
+    }
 }); 
 
 app.put('/api/v1/posts/:id', (req, res) => {
-    return res.status(200).send({message: 'blog updated'});
+    const {title, body} = req.body;
+
+    try{
+        const blog = db.prepare(`
+            UPDATE blogs
+            SET
+                title = ?,
+                body = ?
+            WHERE blogID = ?    
+        `).run(title, body, req.params.id);
+        return res.status(200).send({message: `Blog Updated: ${blog.changes}`});
+
+    } catch (error) {
+        return res.status(400).send({error});
+    }
 });
 
 app.delete('/api/v1/posts/:id', (req, res) => {
-    return res.status(204).send({message: 'blog deleted'});
-})
+    try{
+        const blog = db.prepare(`
+            DELETE FROM blogs
+            WHERE blogID = ?
+        `).run(req.params.id);
+        return res.status(204).send({message: 'blog deleted'});
+    } catch(error) {
+        return res.status(400).send({error});
+    }
+});
 
 
 
