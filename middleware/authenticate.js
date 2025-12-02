@@ -4,45 +4,44 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 
 export const authenticateUser = async (req, res, next) => {
-    const {email, username, password} = req.body; 
-    const query = db.prepare(`
-        SELECT userID, email, username, password_hash FROM users WHERE email = ? OR username = ?
-    `);
-
     try{
-        const user = query.get(email, username);
+        const {email, username, password} = req.body;
 
-        if(!user.username || !user.email){
-            return res.status(404).send({message: 'user not found'})
-        };
+        const user = db.prepare(`
+            SELECT userID, email, username, password_hash
+            FROM users
+            WHERE email = ? OR username = ?
+        `).get(email, username);
 
-        const passwordCorrect = await bcrypt.compare(password, user.password_hash)
+        if(!user){
+            return res.status(404).send({message: 'User Not found (404)'});
+        }
+
+        const passwordCorrect = await bcrypt.compare(password, user.password_hash);
 
         if(!passwordCorrect){
-            return res.status(400).send({message: 'incorrect user!'})
-        };
+            return res.status(401).send({message: 'Password Incorrect!'});
+        }
+
+        req.userID = user.userID;
 
         next();
-
-    } catch (error){
-        console.log(error);
-        return res.status(404).send(error)
+    } catch (error) {
+        return res.status(400).send({message: `${error}`});
     }
 }
 
 export const authenticateCookie = async (req, res, next) => {
-    const token = req.cookies.token;
-    if(!token){
-        return res.status(401).send({error: 'stop hacking'});
+    try{
+        const token = req.cookies.token;
+        if(!token){
+            return res.status(404).send({message: 'Token not found'}); 
+        }
+
+        const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+        req.userID = decodedToken.userID;
+        next();
+    } catch (error) {
+        return res.status(400).send({message: `${error}`});
     }
-
-    const user = jwt.verify(token, process.env.SECRET_KEY);
-
-    if(!user) {
-        return res.status(401).send({error: 'stop hacking'});
-    }
-
-    req.user = user; 
-
-    next();
 }
